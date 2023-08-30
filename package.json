@@ -1,0 +1,17 @@
+{
+  "name": "starknet-nft-minter",
+  "version": "1.0.0",
+  "description": "Mints Starknet Quantum Leap NFT",
+  "main": "index.js",
+  "type": "module",
+  "keywords": ["NFT", "Quantum Leap", "Starknet", "Soft"],
+  "author": "retrodrop.tools",
+  "license": "MIT",
+  "dependencies": {
+    "ccxt": "^4.0.78",
+    "debug": "^4.3.4",
+    "fs-extra": "^11.1.1",
+    "starknet": "^5.19.0",
+    "winston": "^3.10.0"
+  }
+}
