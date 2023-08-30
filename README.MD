@@ -15,3 +15,6 @@ In order for the software to start working, you need to:
 - Results saves to results.json
 - If account failed to mint, you can restart soft it will try to mint only failed account
 - Supports Argent X & Braavos wallets
+
+### How it works
+![MINT](mint.png)
