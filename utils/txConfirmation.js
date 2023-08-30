@@ -4,7 +4,7 @@ import { SetupDelay } from "./Delay.js";
 import { waitForGasTxStarknet } from "./WaitForGas.js";
 
 export default class txConfirmation {
-    constructor (txPayload, transaction, address,privateKey, logger, moduleString) {
+    constructor (txPayload, transaction, address, privateKey, logger, moduleString) {
         this.txPayload = txPayload;
         this.address = address;
         this.provider = new Provider({ sequencer: { network: constants.NetworkName.SN_MAIN } });
@@ -68,13 +68,13 @@ export default class txConfirmation {
                             nonce = parseInt(nonce, 16);
                             if (nonce > nonceCash) {
                                 this.logger.info(`\x1b[32m${ this.moduleString } - The transaction is fully confirmed in the blockchain | Nonce ${ nonce }\x1b[0m`);
-                                this.transaction.status = 'Done';
+                                this.transaction = 'Done';
                                 return this.transaction
                             }
                         }
                     } else if (nonce > nonceCash) {
                         this.logger.info(`\x1b[32m${ this.moduleString } - The transaction is fully confirmed in the blockchain | Nonce ${ nonce }\x1b[0m`);
-                        this.transaction.status = 'Done';
+                        this.transaction = 'Done';
                         return this.transaction
                     }
                 } else if (flag === 0) {
@@ -108,7 +108,7 @@ export default class txConfirmation {
                 attempts++;
                 await SetupDelay(General.delay,this.moduleString,this.logger)
                 if (attempts >= maxAttempts) {
-                    this.transaction.status = 'Failed';
+                    this.transaction = 'Failed';
                     return this.transaction
                 }
             }

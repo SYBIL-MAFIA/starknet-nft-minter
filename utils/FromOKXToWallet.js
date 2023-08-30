@@ -23,15 +23,14 @@ export const  FromOkxToWallet = async (path,address,logger,moduleString) => {
             };
 
             const exchange = new ccxt.okx(exchange_options);
-            if (OKXAuth.use_okx_proxy) {
-                exchange.https_proxy = OKXAuth.okx_proxy
-            }
+
+            exchange.https_proxy = OKXAuth.okx_proxy
 
             let withdrawFee;
             const tmpNetwork = 'StarkNet';
             try {
                 const fees = await exchange.fetchDepositWithdrawFees(['ETH']);
-                const feeInfo = fees['ETH'].networks?.[tmpNetwork];
+                const feeInfo = fees['ETH']?.networks?.[tmpNetwork];
                 if (feeInfo) {
                     withdrawFee = feeInfo.withdraw.fee;
 
