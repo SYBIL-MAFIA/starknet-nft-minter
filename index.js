@@ -2,7 +2,6 @@ import {loadWallets} from "./utils/LoadDataFromFiles.js";
 import {CreateJSONResult} from "./utils/DataJSONFile.js";
 import path from "path";
 import fs from "fs";
-import {writeFile} from "fs/promises";
 import {Workers} from "./utils/workers.js";
 
 const main = async () => {

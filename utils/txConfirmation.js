@@ -2,6 +2,7 @@ import { Account, constants, Provider } from 'starknet';
 import { General } from "../config.js";
 import { SetupDelay } from "./Delay.js";
 import { waitForGasTxStarknet } from "./WaitForGas.js";
+
 export default class txConfirmation {
     constructor (txPayload, transaction, address,privateKey, logger, moduleString) {
         this.txPayload = txPayload;
@@ -27,7 +28,6 @@ export default class txConfirmation {
                     nonceCash = parseInt(nonceCash, 16);
                 } catch (e) {
                     this.logger.error(`${this.moduleString} - Error while fetching nonce: ${e}`);
-
                 }
 
                 let executeHash = await account.execute(this.txPayload);
@@ -50,7 +50,6 @@ export default class txConfirmation {
                         }
                     } catch (error) {
                         this.logger.info('An error occurred while getting txn status.');
-
                     }
 
                     await new Promise(resolve => setTimeout(resolve, 2 * 1000));
@@ -61,34 +60,33 @@ export default class txConfirmation {
                     nonce = parseInt(nonce, 16);
 
                     if (nonce === nonceCash) {
-                        this.logger.info(`${this.moduleString} - Transaction success, but nonce still low | Nonce ${nonce}`);
+                        this.logger.info(`${ this.moduleString } - Transaction success, but nonce still low | Nonce ${ nonce }`);
 
                         for (let i = 0; i < 90; i++) {
                             await new Promise(resolve => setTimeout(resolve, 2 * 1000));
                             nonce = await account.getNonce();
                             nonce = parseInt(nonce, 16);
                             if (nonce > nonceCash) {
-                                this.logger.info(`\x1b[32m${this.moduleString} - The transaction is fully confirmed in the blockchain | Nonce ${nonce}\x1b[0m`);
+                                this.logger.info(`\x1b[32m${ this.moduleString } - The transaction is fully confirmed in the blockchain | Nonce ${ nonce }\x1b[0m`);
                                 this.transaction.status = 'Done';
                                 return this.transaction
-                                }
                             }
                         }
                     } else if (nonce > nonceCash) {
-                            this.logger.info(`\x1b[32m${this.moduleString} - The transaction is fully confirmed in the blockchain | Nonce ${nonce}\x1b[0m`);
-                            this.transaction.status = 'Done';
-                            return this.transaction
-                    } else if (flag === 0) {
-                        this.logger.error(`${this.moduleString} - Transaction rejected.`);
-                        throw new Error(`${this.moduleString} - Transaction rejected.`)
-                    } else if (flag === -1) {
-                        this.logger.error(`${this.moduleString} - Transaction Reverted`);
-                        throw new Error(`${this.moduleString} - Transaction rejected.`)
-                    } else {
-                        this.logger.error(`${this.moduleString} - An error occurred in transaction.`);
-
-                        throw new Error(`${this.moduleString} - Transaction rejected.`)
+                        this.logger.info(`\x1b[32m${ this.moduleString } - The transaction is fully confirmed in the blockchain | Nonce ${ nonce }\x1b[0m`);
+                        this.transaction.status = 'Done';
+                        return this.transaction
                     }
+                } else if (flag === 0) {
+                    this.logger.error(`${this.moduleString} - Transaction rejected.`);
+                    throw new Error(`${this.moduleString} - Transaction rejected.`)
+                } else if (flag === -1) {
+                    this.logger.error(`${this.moduleString} - Transaction Reverted`);
+                    throw new Error(`${this.moduleString} - Transaction rejected.`)
+                } else {
+                    this.logger.error(`${this.moduleString} - An error occurred in transaction.`);
+                    throw new Error(`${this.moduleString} - Transaction rejected.`)
+                }
 
                 } catch (error) {
                     this.logger.error(`\x1b[31m${this.moduleString} - An error occurred txPayload error: ${error}\x1b[0m`);

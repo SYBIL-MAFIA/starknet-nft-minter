@@ -24,13 +24,14 @@ export const Workers = async (path,address,dirName,addressIndex,lenght) => {
     }
 
     if (path[address]['MintNFT'] !== 'Done') {
-        if (await ChechMint(address) === 0) {
-            path = await MintNFT(path, address, logger, `[Account ${ addressIndex }][Mint]`);
-        } else {
+        const hasMinted = await ChechMint(address);
+        if (hasMinted === 1) {
             logger.info(`[Account ${ addressIndex }][Mint] - NFT already minted`)
             path[address]['MintNFT'] = 'Done'
             await writeFile('./results.json', JSON.stringify(path, null, 2));
             await SetupDelay(General.delay, `[Account ${addressIndex}][Withdrawal][OKX]`, logger)
+        } else {
+            path = await MintNFT(path, address, logger, `[Account ${ addressIndex }][Mint]`);
         }
     }
 }
